@@ -14,10 +14,13 @@
     "iview": "^2.5.1",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
+    "node-sass": "^4.6.0",
     "nprogress": "^0.2.0",
     "plyr": "^2.0.16",
+    "sass-loader": "^6.0.6",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

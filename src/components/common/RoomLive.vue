@@ -1,7 +1,6 @@
 <template>
-    <div class="liveWindows" v-if="id">
-        <Button type="success" size="large" style="position: absolute;z-index: 1;top: 50%;left: 50%;margin: -16px 0 0 -51px;"><router-link :to="{ name: 'liveRoom', params: {roomId: id} }" class="link-to-room">进入直播间</router-link></Button>
-        <video id="videoElement" controls crossorigin>
+    <div class="liveWindows">
+        <video id="videoElement2" controls crossorigin>
         </video>
     </div>
 </template>
@@ -64,27 +63,21 @@
                 "<span class='plyr__sr-only'>Toggle Fullscreen</span>",
                 "</button>",
                 "</div>"].join("");
-            var players = plyr.setup(document.querySelector("#videoElement"),{
+            var players = plyr.setup(document.querySelector("#videoElement2"),{
                 clickToPlay: false,
                 html: controls
             })[0];
 
             if (flvjs.isSupported()) {
+                var videoElement = document.querySelector("#videoElement2");
+                var flvPlayer = flvjs.createPlayer({
+                    type: 'flv',
+                    url: 'http://cdn.duimeng.org:8080/live/'+this.id+'.flv'
+                });
+                this.flvPlayer = flvPlayer
+                flvPlayer.attachMediaElement(videoElement);
 
-                if (this.id == null)
-                {
-                    console.log('呀')
-                } else {
-                    var videoElement = document.querySelector("#videoElement");
-                    var flvPlayer = flvjs.createPlayer({
-                        type: 'flv',
-                        url: 'http://cdn.duimeng.org:8080/live/'+this.id+'.flv'
-                    });
-                    this.flvPlayer = flvPlayer
-                    flvPlayer.attachMediaElement(videoElement);
-
-                    players.play()
-                }
+                players.play()
             }
 
             players.on('pause', function(event) {

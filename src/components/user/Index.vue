@@ -4,9 +4,9 @@
             <div class="profile-info">
                 <div class="container">
                     <div class="profile-info-offset">
-                        <h2>赵少锋</h2>
+                        <h2>{{ name }}</h2>
                         <div>
-                            <p>bem.zhao@gmail.com</p>
+                            <p>{{ email }}</p>
                             <p>这位同学很懒，啥都没写</p>
                             <a href="#"><em>2</em><span>粉丝</span></a>
                             <a href="#"><em>5</em><span>关注</span></a>
@@ -14,56 +14,37 @@
                     </div>
                 </div>
             </div>
-            <div class="profile-banner"><!-- <img src="../static/images/banner/banner1.jpg" alt=""> --></div>
+            <div class="profile-banner"></div>
         </div>
-
         <div class="container" style="margin-top: -125px;">
             <div class="pinwrapper">
                 <div class="leftmenu">
                     <div class="user-img"><img src="../../assets/images/avatar/avatar-5.png" alt=""></div>
                     <ul class="list-group">
-                        <li class="list-group-item active">
-                            <a href="#"><i class="material-icons">ondemand_video</i>我的直播间</a>
+                        <li class="list-group-item">
+                            <router-link :to="'/user/' + id"><i class="material-icons">account_circle</i>个人中心</router-link>
                         </li>
                         <li class="list-group-item">
-                            <a href="#"><i class="material-icons">settings</i>设置直播间</a>
+                            <router-link :to="'/user/' + id + '/setting'"><i class="material-icons">settings</i>个人设置</router-link>
                         </li>
                         <li class="list-group-item">
-                            <a href="#"><i class="material-icons">videocam</i>录像管理</a>
+                            <router-link :to="'/user/' + id + '/liveinfo'"><i class="material-icons">ondemand_video</i>我的直播间</router-link>
                         </li>
                         <li class="list-group-item">
-                            <a href="#"><i class="material-icons">border_color</i>我的笔记</a>
+                            <router-link :to="'/user/' + id + '/livesetting'"><i class="material-icons">settings</i>设置直播间</router-link>
+                        </li>
+                        <li class="list-group-item">
+                            <router-link :to="'/user/' + id + '/note'"><i class="material-icons">border_color</i>我的笔记</router-link>
                         </li>
                     </ul>
                 </div>
             </div>
 
             <div class="cards shadow_z1 leftmenu-offset">
-                <form class="form-horizontal setroom">
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">房间ID</label>
-                        <div class="col-sm-10">
-                            <p class="form-control-static">5166516</p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="roomtitle" class="col-sm-2 control-label">房间标题</label>
-                        <div class="col-sm-10">
-                            <p class="form-control-static pull-left">5166516</p>
-                            <a class="btn btn-default">修改</a>
-                        </div>
-                        <div class="col-sm-10" style="display: none;" data-edit-input>
-                            <div class="row">
-                                <div class="col-md-10"><input type="text" class="form-control" id="roomtitle" placeholder="Password"></div>
-                                <div class="col-md-2"><a href="#" class="btn btn-success">修改</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <div style="height: 1000px;"></div>
+                <router-view></router-view>
             </div>
         </div>
-    </div><!--main end-->
+    </div>
 </template>
 
 <script>
@@ -80,6 +61,17 @@
                 containerSelector: ".container",
                 padding: {top: 80}
             })
+        },
+        computed: {
+            name: function () {
+                return localStorage.name
+            },
+            email: function () {
+                return localStorage.email
+            },
+            id: function () {
+                return localStorage.id
+            }
         }
     }
 </script>

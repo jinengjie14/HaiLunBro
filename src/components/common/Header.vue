@@ -1,13 +1,14 @@
 <template>
-<div class="header">
+  <div>
+    <div v-bind:class="headerClassName">
       <div class="container">
         <div class="layout_header-row">
-          <div class="logo"><a href="#">教学平台</a></div>
-          <ul class="nav navbar-nav">
-            <li class="active"><router-link :to="{ name: 'index' }">首页</router-link></li>
-            <li><router-link :to="{ name: 'index' }">直播</router-link></li>
-            <li><router-link :to="{ name: 'test' }">录播</router-link></li>
-            <li><router-link :to="{ name: '123123' }">笔记</router-link></li>
+          <div class="drawer_button visible-xs"><i class="material-icons">menu</i></div>
+          <div class="logo hidden-xs"><a href="#">课乎</a></div>
+          <ul class="nav navbar-nav hidden-xs">
+            <li v-bind:class="{ active: isIndexActive }"><router-link :to="{ name: 'index' }">首页</router-link></li>
+            <li v-bind:class="{ active: isLiveActive }"><router-link :to="{ name: 'allLive' }">直播</router-link></li>
+            <li v-bind:class="{ active: isNoteActive }"><router-link :to="{ name: 'noteList' }">笔记</router-link></li>
           </ul>
           <ul class="top-menu">
             <li class="mitem">
@@ -29,145 +30,65 @@
                     <a href="javascript:void(0);"><i class="material-icons">done_all</i></a>
                   </div>
                   <div class="lv-body"> </div>
-                  <a class="lv-footer" href="javascript:void(0);">所有消息</a> 
+                  <a class="lv-footer" href="javascript:void(0);">所有消息</a>
                 </div>
               </div>
             </li>
-            <li class="mitem" v-show="!isLogin"><a class="mitema"><span><Button type="dashed" v-on:click="showModel">登陆</Button></span></a></li>
-            <li class="mitem has-feedback" v-show="isLogin">
-              <a class="mitema" id="top-thisuse" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src="../../assets/images/avatar/avatar-5.png" alt="" class="header_userimg"/>
-              </a>
-              <div class="dropdown-menu dropright dropdown-menu-lg" aria-labelledby="top-thisuse">
-                <div id="notifications" class="listview">
-                  <div class="lv-header"> 个人信息 </div>
-                  <div class="lv-body" style="min-height: initial;">
-                    <div class="myInfo">
-                      <div class="myphoto">
-                        <div class="userhead" data-type="update_avatar">
-                          <a href="#" style="display:block;">
-                            <img src="../../assets/images/avatar/avatar-5.png" alt="" width="96px;" height="96px;" />
-                            <span class="change-userhead">更改</span>
-                          </a>
-                        </div>
-                      </div>
-                      <div class="myshow">
-                        <div class="myname">赵少锋</div>
-                        <div class="Email">123456@qq.com</div>
-                        <div class="signature">这是个性签名</div>
-
-                        <router-link class="btn btn-success" to="/user/7911">我的账户</router-link>
-                        <a href="#" class="btn btn-default">设置</a>
-                      </div>
-                    </div>
-                  </div>
-                  <a href="javascript:void(0);" class="lv-footer m-t-10 loginOut" id="JLogout">退出</a>
-                </div>
-              </div>
-            </li>
+            <Login></Login>
           </ul>
         </div>
       </div>
-      <Modal v-model="showLoginmodel" title="自定义宽度" width="318">
-        <h1 slot="header" style="font-size: 2.5rem;color: #333; line-height: 0rem;">
-          登陆
-        </h1>
-        <Form ref="formInline" :model="formInline" :rules="ruleInline">
-          <FormItem prop="user">
-            <Input type="text" autocomplete="off" v-model="formInline.account" placeholder="用户名">
-            <Icon type="ios-person-outline" slot="prepend"></Icon>
-            </Input>
-          </FormItem>
-          <FormItem prop="password">
-            <Input type="password" autocomplete="off" v-model="formInline.password" placeholder="密码">
-            <Icon type="ios-locked-outline" slot="prepend"></Icon>
-            </Input>
-          </FormItem>
-          <FormItem>
-            <Button type="primary" :loading="loading" long @click="handleSubmit('formInline')">登录</Button>
-          </FormItem>
-        </Form>
-        没有账号？ <router-link :to="{ name: 'index' }">注册</router-link>
-        <router-link :to="{ name: 'index' }" style="float:right">忘记密码</router-link>
-        <div slot="footer">
-        </div>
-      </Modal>
     </div>
+    <div class="layout_drawer visible-xs">
+      <div class="head visible-xs">
+        <span>课乎</span>
+      </div>
+      <ul class="drawer-menu" name="drawer-menu">
+        <li v-bind:class="{ active: isIndexActive }"><router-link :to="{ name: 'index' }">首页</router-link></li>
+        <li v-bind:class="{ active: isLiveActive }"><router-link :to="{ name: 'allLive' }">直播</router-link></li>
+        <li v-bind:class="{ active: isNoteActive }"><router-link :to="{ name: 'noteList' }">笔记</router-link></li>
+      </ul>
+    </div>
+    <div class="layout_obfuscator"></div>
+  </div>
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            showLoginmodel: false,
-            loading: false,
-            formInline: {
-                account: '',
-                password: ''
+
+    export default {
+        data() {
+            return {
+
+            }
+        },
+        mounted: function() {
+            console.log(this.$route.name);
+        },
+        computed: {
+            headerClassName: function () {
+                return this.$route.name == 'index' ? 'header' : 'header green'
             },
-            ruleInline: {
-                account: [
-                    { required: true, message: '请填写用户名', trigger: 'blur' }
-                ],
-                password: [
-                    { required: true, message: '请填写密码', trigger: 'blur' },
-                    { type: 'string', min: 6, message: '密码长度不能小于6位', trigger: 'blur' }
-                ]
-            }
-        }
-    },
-    methods: {
-        showModel() {
-            this.showLoginmodel = true
-        },
-        del() {
-
-        },
-        handleSubmit(name) {
-            this.$refs[name].validate((valid) => {
-                if (valid) {
-                    let self = this
-                    this.loading = true
-                    let param = new URLSearchParams();
-                    param.append("account", this.formInline.account);
-                    param.append("password", this.formInline.password);
-                    this.$http.post('http://10.1.65.33:81/login', param, {
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                    }).then(response => {
-                        if (response.data.code == 200) {
-                            this.showLoginmodel = false
-                            self.$Message.success('欢迎回来,'+response.data.data.account);
-                            localStorage.login = true
-                            localStorage.account = response.data.data.account
-                            localStorage.id = response.data.data.id
-                        }
-
-                        if (response.data.code == 412) {
-                            self.$Message.error(response.data.msg);
-                        }
-
-                        this.loading = false
-                    }, response => {
-                        // error callback
-                    })
-                } else {
-                    this.$Message.error('表单验证失败!');
+            isIndexActive: function () {
+                if (this.$route.name == 'index') {
+                    return true
                 }
-            })
-        }
-    },
-    computed: {
-        isLogin: function () {
-            if (typeof (localStorage.login) == 'undefined') {
                 return false
-            }
-            console.log('is true')
-            return true
+            },
+            isLiveActive: function () {
+                if (this.$route.name == 'allLive' || this.$route.name == 'liveRoom') {
+                    return true
+                }
+                return false
+
+            },
+            isNoteActive: function () {
+                if (this.$route.name == 'noteList' || this.$route.name == 'notePage') {
+                    return true
+                }
+                return false
+            },
         }
     }
-}
 </script>
 
 <style lang="less">
